@@ -473,13 +473,40 @@ export default function DonorDashboard() {
               </CardHeader>
               <CardContent>
                 <Timeline
-                  steps={[
-                    { label: "Profile Verified", status: profile ? "completed" : "pending" },
-                    { label: "Match Found", status: matches.length > 0 ? "completed" : profile ? "current" : "pending" },
-                    { label: "Hospital Coordination", status: matches.some(m => m.status === "approved") ? "current" : "pending" },
-                    { label: "Donation Complete", status: matches.some(m => m.status === "completed") ? "completed" : "pending" },
-                  ]}
-                />
+                    steps={[
+                      {
+                        title: "Profile Verified",
+                        description: "Your donor profile has been verified by the hospital",
+                        status: profile ? "completed" : "pending",
+                      },
+                      {
+                        title: "Match Found",
+                        description: "A compatible recipient match has been identified",
+                        status:
+                          matches.length > 0
+                            ? "completed"
+                            : profile
+                            ? "current"
+                            : "pending",
+                      },
+                      {
+                        title: "Hospital Coordination",
+                        description: "Hospital is coordinating medical checks and approvals",
+                        status: matches.some((m) => m.status === "approved")
+                          ? "current"
+                          : "pending",
+                      },
+                      {
+                        title: "Donation Complete",
+                        description: "Organ donation process has been completed",
+                        status: matches.some((m) => m.status === "completed")
+                          ? "completed"
+                          : "pending",
+                      },
+                    ]}
+                  />
+
+
               </CardContent>
             </Card>
 

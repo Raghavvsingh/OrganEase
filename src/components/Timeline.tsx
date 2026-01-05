@@ -44,37 +44,31 @@ export function generateTimelineSteps(match: Match): TimelineStep[] {
     status: "completed",
   });
 
-  // Step 2: Hospital Approval
-  // Convert to boolean to ensure proper checking
-  const isApproved = !!(match.approvedByHospital === true || match.approvedByHospital === "true" || match.approvedByHospital === 1 || match.approvedByHospital === "1");
-  console.log('Timeline - Hospital approval check:', {
-    approvedByHospital: match.approvedByHospital,
-    type: typeof match.approvedByHospital,
-    isApproved,
-    matchId: match.id || match.matchId
+ // Step 2: Hospital Approval
+const isApproved = Boolean(match.approvedByHospital);
+
+if (isApproved) {
+  steps.push({
+    title: "Hospital Approved",
+    description: "Match has been reviewed and approved by the hospital",
+    date: formatDate(match.approvedAt),
+    status: "completed",
   });
-  
-  if (isApproved) {
-    steps.push({
-      title: "Hospital Approved",
-      description: "Match has been reviewed and approved by the hospital",
-      date: formatDate(match.approvedAt),
-      status: "completed",
-    });
-  } else {
-    steps.push({
-      title: "Hospital Review",
-      description: "Waiting for hospital to review and approve the match",
-      status: "current",
-    });
-    return steps; // Stop here if not approved
-  }
+} else {
+  steps.push({
+    title: "Hospital Review",
+    description: "Waiting for hospital to review and approve the match",
+    status: "current",
+  });
+  return steps;
+}
+
 
   // Step 3: Match Acceptance
   // Convert to boolean to ensure proper checking
-  const donorAccepted = !!(match.donorAccepted === true || match.donorAccepted === "true" || match.donorAccepted === 1 || match.donorAccepted === "1");
-  const recipientAccepted = !!(match.recipientAccepted === true || match.recipientAccepted === "true" || match.recipientAccepted === 1 || match.recipientAccepted === "1");
-  
+  const donorAccepted = Boolean(match.donorAccepted);
+  const recipientAccepted = Boolean(match.recipientAccepted);
+
   if (donorAccepted && recipientAccepted) {
     steps.push({
       title: "Match Accepted",
